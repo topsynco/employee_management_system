@@ -1,9 +1,9 @@
-// Dependencies
+
 var mysql = require("mysql");
 const inquirer = require("inquirer");
 const confirm = require('inquirer-confirm');
 
-// MySQL DB Connection Information
+
 var connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
@@ -18,7 +18,6 @@ var showroles;
 var showdepartments;
 var showemployees;
 
-// Initiate MySQL Connection.
 connection.connect(function (err) {
   
   if (err) {
@@ -34,14 +33,14 @@ connection.connect(function (err) {
     showdepartments = res.map(dep => ({ name: dep.name, value: dep.id }))
   })
   connection.query("SELECT * from employee", function (error, res) {
-    // console.log(error, res);
+    
     showemployees = res.map(emp => ({ name: `${emp.first_name} ${emp.last_name}`, value: emp.id }))
   })
 
   showmenu();
 })
 
-// Show inquirer menu
+
 function showmenu() {
   inquirer
     .prompt(
@@ -84,7 +83,7 @@ function showmenu() {
           }
         ]
       }).then(function (res) {
-        // console.log(res);
+        
       menu(res.choices)
     })
 }
@@ -139,7 +138,6 @@ function viewAllRoles() {
   })
 }
 
-// Ask the user for the employee's information.
 function addEmployee() {
   inquirer
     .prompt([
@@ -166,7 +164,7 @@ function addEmployee() {
         choices: showemployees,
       }
     ]).then(function (response) {
-      // console.log(response)
+     
       addEmployees(response)
     })
 }
@@ -195,7 +193,7 @@ function addDept() {
       }
     ])
     .then(function (response) {
-      // console.log(response);
+     
       addDepartment(response);
     })
 }
@@ -203,7 +201,7 @@ function addDept() {
 function addDepartment(data) {
   connection.query("INSERT INTO department SET ?", { name: data.name },
   function (error, res) {
-    // console.log(error, res);
+   
     if (error) throw error;
   });
   endOrMenu();
@@ -230,7 +228,7 @@ function addRole() {
       }
     ])
     .then(function (response) {
-      // console.log(response);
+      
       addEmployeeRole(response);
     })
 }
@@ -241,7 +239,7 @@ function addEmployeeRole(data) {
     salary: data.salary,
     department_id: data.id
   }, function (error, res) {
-    // console.log(error, res);
+   
     if (error) throw error;
   });
   endOrMenu();
@@ -264,7 +262,7 @@ function updateRole() {
       }
     ])
     .then(function (response) {
-      // console.log(response);
+
       updateEmployeeRole(response);
     })
 }
@@ -272,7 +270,7 @@ function updateRole() {
 function updateEmployeeRole(data) {
   connection.query(`UPDATE employee SET role_id = ${data.titleID} WHERE id = ${data.empID}`,
   function (error, res) {
-    // console.log(error, res);
+  
     if (error) throw error;
   });
   endOrMenu();
